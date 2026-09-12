@@ -16,6 +16,14 @@ The application lets users:
 - Toggle between light and dark themes
 - Experience responsive layouts for mobile and desktop
 
+.
+
+🚀 Live Demo
+https://blog-platform-lake-omega.vercel.app/
+
+📦 GitHub Repository
+https://github.com/AmirHosein240/jira-clone
+
 ## Tech Stack
 
 | Technology            | Purpose                                   |
