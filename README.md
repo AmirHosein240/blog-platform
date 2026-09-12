@@ -22,7 +22,7 @@ The application lets users:
 https://blog-platform-lake-omega.vercel.app/
 
 📦 GitHub Repository
-https://github.com/AmirHosein240/jira-clone
+https://github.com/AmirHosein240/blog-platform
 
 ## Tech Stack
 
