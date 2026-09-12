@@ -1,116 +1,97 @@
-# 📝 MyBlog — Modern Blog Platform
+# MyBlog — Modern Blog Platform
 
-A modern, responsive blog platform built with **Next.js, TypeScript, Tailwind CSS, and React**.
+A responsive blog platform built with Next.js, React, TypeScript, and Tailwind CSS. The app showcases a real-world content browsing flow: landing page, posts listing with search and sorting, author pages, dynamic post detail pages, and client-side comment persistence.
 
-The project demonstrates modern frontend development concepts including the Next.js App Router, dynamic routing, server-side data fetching, loading and error states, form validation, client-side persistence, responsive UI, dark mode, and image optimization.
+This project is designed to demonstrate production-oriented frontend patterns such as app-router pages, server-side metadata generation, React Query integration, persistent client state, and clean component boundaries.
 
-## 🚀 Live Demo
+## Overview
 
-> Coming soon — deployed with Vercel.
+The application lets users:
 
-## 📌 GitHub Repository
+- Browse featured content on the home page
+- Explore the full posts list with search and sorting
+- Navigate through author profiles and author-specific posts
+- Read individual post details
+- Add comments to posts, with comments persisted in browser storage
+- Toggle between light and dark themes
+- Experience responsive layouts for mobile and desktop
 
-[GitHub Repository](https://github.com/AmirHosein240/blog-platform)
+## Tech Stack
 
----
+| Technology            | Purpose                                   |
+| --------------------- | ----------------------------------------- |
+| Next.js 16            | App Router, SSR, routing, page generation |
+| React 19              | UI development                            |
+| TypeScript            | Static typing                             |
+| Tailwind CSS 4        | Styling and responsive design             |
+| @tanstack/react-query | Remote data fetching and caching          |
+| React Hook Form       | Form state management                     |
+| Zod                   | Form validation                           |
+| Orval                 | OpenAPI client code generation            |
+| JSONPlaceholder       | Demo API data source                      |
+| ESLint                | Linting and code quality checks           |
 
-## ✨ Features
+## Features
 
-### 🏠 Homepage
+### Home Page
 
-- Modern hero section
-- Featured/latest articles
-- Responsive layout
-- Navigation to posts and authors
-- Responsive footer
+- Hero section with CTA buttons
+- Featured articles on the landing page
+- Card-based layout for article previews
+- Responsive navigation and footer
 
-### 📰 Blog Posts
+### Posts Page
 
-- Browse all posts
-- Dynamic post detail pages
-- Featured post section
-- Responsive post cards
-- Author information
-- Search posts by title
-- Sort posts by:
-  - Newest
-  - Oldest
-  - Title
-
+- Full post listing
+- Search by title
+- Sorting by newest, oldest, and title
+- URL-based query state
 - Pagination
+- Featured post section before the rest of the list
 
-### 👤 Authors
+### Author Pages
 
-- Dynamic author pages
-- Author profile information
-- Display posts written by each author
-- Author badges connected to author pages
+- Dynamic route per author
+- Author profile summary
+- List of posts authored by that person
+- Linked author badges on post cards
 
-### 💬 Comments
+### Post Detail Pages
 
-- View comments for each post
-- Add new comments
-- Form validation with Zod
-- Form state management with React Hook Form
-- Comments persisted in browser `localStorage`
+- Dynamic route per post
+- Metadata generation for SEO
+- Not-found handling for invalid IDs
+- Comments section below the article body
 
-### 🎨 UI & UX
+### Comments
 
-- Responsive design
-- Dark mode
-- Mobile navigation
-- Skeleton loading states
-- Empty states
-- Error states
-- Custom 404 pages
-- Smooth hover interactions
-- Optimized images with `next/image`
+- Fetch comments from the API
+- Merge fetched comments with locally persisted comments
+- Add new comments with validation
+- Persist inserted comments in localStorage for the current post
 
-### ⚡ Next.js Optimizations
+### UI and UX
 
-- App Router
-- Dynamic routes
-- `generateMetadata` for dynamic SEO metadata
-- Server Components where appropriate
-- Client Components only where interactivity is required
-- `next/image` image optimization
-- Remote image configuration
-- Incremental data revalidation with `revalidate`
-- Route-level loading states
-- Route-level error boundaries
-- `notFound()` handling
+- Light/dark mode toggle
+- Mobile menu for smaller screens
+- Responsive cards and grid layouts
+- Loading skeletons and empty states
+- Theme-aware styling across the app
+- Next.js image optimization via remote patterns
 
----
-
-## 🛠 Tech Stack
-
-| Technology          | Purpose                                      |
-| ------------------- | -------------------------------------------- |
-| **Next.js 16**      | React framework and application architecture |
-| **React 19**        | UI development                               |
-| **TypeScript**      | Type safety                                  |
-| **Tailwind CSS 4**  | Styling and responsive design                |
-| **React Hook Form** | Form management                              |
-| **Zod**             | Form validation                              |
-| **JSONPlaceholder** | Demo REST API                                |
-| **ESLint**          | Code quality and linting                     |
-| **Turbopack**       | Development/build tooling                    |
-
----
-
-## 📂 Project Structure
+## Project Structure
 
 ```text
 blog-platform/
 ├── public/
-│
+│   └── images/
 ├── src/
 │   ├── app/
 │   │   ├── authors/
 │   │   │   └── [id]/
+│   │   │       ├── error.tsx
 │   │   │       ├── loading.tsx
 │   │   │       └── page.tsx
-│   │   │
 │   │   ├── posts/
 │   │   │   ├── [id]/
 │   │   │   │   ├── error.tsx
@@ -120,11 +101,9 @@ blog-platform/
 │   │   │   ├── error.tsx
 │   │   │   ├── loading.tsx
 │   │   │   └── page.tsx
-│   │   │
 │   │   ├── globals.css
 │   │   ├── layout.tsx
 │   │   └── page.tsx
-│   │
 │   ├── components/
 │   │   ├── blog/
 │   │   │   ├── AuthorBadge.tsx
@@ -139,87 +118,113 @@ blog-platform/
 │   │   │   ├── PostCardSkeleton.tsx
 │   │   │   ├── SearchBar.tsx
 │   │   │   └── SortDropdown.tsx
-│   │   │
 │   │   ├── layout/
 │   │   │   ├── Footer.tsx
 │   │   │   ├── Header.tsx
 │   │   │   └── ThemeToggle.tsx
-│   │   │
 │   │   └── ui/
 │   │       └── Skeleton.tsx
-│   │
 │   ├── hooks/
 │   │   └── usePersistedComments.ts
-│   │
-│   ├── lib/
-│   │   └── api.ts
-│   │
 │   ├── providers/
+│   │   ├── QueryProvider.tsx
 │   │   └── ThemeProvider.tsx
-│   │
-│   └── types/
-│       ├── author.ts
-│       ├── comment.ts
-│       └── post.ts
-│
+│   ├── services/
+│   │   ├── generated/
+│   │   │   ├── comments/
+│   │   │   ├── model/
+│   │   │   ├── posts/
+│   │   │   └── users/
+│   │   ├── http.ts
+│   │   └── swagger.yaml
+│   ├── types/
+│   │   └── post.ts
+│   └── app/
+│       └── ...
 ├── .gitignore
 ├── eslint.config.mjs
 ├── next.config.ts
+├── orval.config.ts
 ├── package.json
-├── package-lock.json
 ├── postcss.config.mjs
 ├── tsconfig.json
-└── README.md
+├── README.md
+└── public/
 ```
 
----
+## Data Flow and API
 
-## 🔌 Data Source
+The project uses JSONPlaceholder as the remote demo API for posts, authors, and comments. Request logic is centralized through the generated client created by Orval, with HTTP utilities in the services layer.
 
-This project uses **JSONPlaceholder** as a public demo REST API.
+Key files:
 
-The application fetches:
+- src/services/http.ts
+- src/services/generated/posts/posts.ts
+- src/services/generated/users/users.ts
+- src/services/generated/comments/comments.ts
 
-- Posts
-- Authors
-- Comments
+This structure keeps UI code separate from API logic and makes future client regeneration easier when the API schema changes.
 
-API requests are centralized inside:
+## Routing
 
-```text
-src/lib/api.ts
+The app includes these primary routes:
+
+- / — homepage with featured content
+- /posts — post listing with filtering and pagination
+- /posts/[id] — post detail page
+- /authors/[id] — author profile and author posts
+
+The project also includes route-level loading and error UI files under the app route folders.
+
+## Local Development
+
+### Install dependencies
+
+```bash
+npm install
 ```
 
-This keeps API-related logic separate from UI components.
+### Start the app in development mode
 
----
-
-## 🔍 Search, Sort & Pagination
-
-The posts page supports client-friendly URL-based filtering.
-
-Examples:
-
-```text
-/posts?search=qui
-/posts?sort=oldest
-/posts?sort=title
-/posts?page=2
+```bash
+npm run dev
 ```
 
-The posts page combines:
+### Production build
 
-```text
-Search
-   ↓
-Filtering
-   ↓
-Sorting
-   ↓
-Pagination
-   ↓
+```bash
+npm run build
+```
+
+### Lint the project
+
+```bash
+npm run lint
+```
+
+### Regenerate API client
+
+```bash
+npm run swagger:gen
+```
+
+## Notes
+
+- The application uses browser localStorage for comment persistence, scoped by post ID.
+- Dark mode is applied through a custom theme provider and class toggling on the document root.
+- The build has been verified successfully with the project scripts in the current workspace.
+
+## Verification Status
+
+The following checks were run successfully in the project:
+
+- npm run build
+- npm run lint
+
+This confirms the current codebase is building cleanly and passing the configured lint rules.
 UI
-```
+
+````
 
 This approach keeps the page state represented by URL parameters, making filtered and sorted views easier to share and navigate.
 
@@ -233,7 +238,7 @@ The persistence logic is isolated in:
 
 ```text
 src/hooks/usePersistedComments.ts
-```
+````
 
 This means comments can remain available after refreshing the page without requiring a custom backend.
 
