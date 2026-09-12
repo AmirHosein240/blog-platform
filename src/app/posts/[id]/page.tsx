@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
+
 import Link from "next/link";
+
 import { notFound } from "next/navigation";
 
-import { getComments, getPost } from "@/lib/api";
+import { getComments } from "@/services/generated/comments/comments";
+import { getPost } from "@/services/generated/posts/posts";
+
 import CommentsSection from "@/components/blog/CommentsSection";
 
 interface PostPageProps {
@@ -14,7 +18,11 @@ export async function generateMetadata({
 }: PostPageProps): Promise<Metadata> {
   const { id } = await params;
 
-  const post = await getPost(id);
+  const postId = Number(id);
+
+  const result = await getPost(postId);
+
+  const post = result.data;
 
   if (!post) {
     return {
@@ -32,13 +40,19 @@ export async function generateMetadata({
 export default async function PostPage({ params }: PostPageProps) {
   const { id } = await params;
 
-  const post = await getPost(id);
+  const postId = Number(id);
+
+  const postResult = await getPost(postId);
+
+  const post = postResult.data;
 
   if (!post) {
     notFound();
   }
 
-  const comments = await getComments(id);
+  const commentsResult = await getComments(postId);
+
+  const comments = commentsResult.data;
 
   return (
     <main className="min-h-screen bg-white px-6 py-12 text-black dark:bg-gray-950 dark:text-white">

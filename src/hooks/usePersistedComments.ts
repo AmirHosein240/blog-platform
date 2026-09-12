@@ -1,39 +1,79 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
-import type { Comment } from "@/types/comment";
+import type { Comment } from "@/services/generated/model/comment";
+
+function getStorageKey(postId: number) {
+  return `comments-${postId}`;
+}
+
+function getStoredComments(postId: number): Comment[] {
+  if (typeof window === "undefined") {
+    return [];
+  }
+
+  const storedComments = localStorage.getItem(getStorageKey(postId));
+
+  if (!storedComments) {
+    return [];
+  }
+
+  try {
+    return JSON.parse(storedComments) as Comment[];
+  } catch {
+    return [];
+  }
+}
+
+function subscribe(callback: () => void) {
+  const handleStorageChange = () => {
+    callback();
+  };
+
+  window.addEventListener("storage", handleStorageChange);
+  window.addEventListener("comments-updated", handleStorageChange);
+
+  return () => {
+    window.removeEventListener("storage", handleStorageChange);
+    window.removeEventListener("comments-updated", handleStorageChange);
+  };
+}
 
 export function usePersistedComments(postId: number) {
-  const [comments, setComments] = useState<Comment[]>(() => {
-    if (typeof window === "undefined") {
-      return [];
-    }
+  const comments = useSyncExternalStore(
+    subscribe,
+    () => JSON.stringify(getStoredComments(postId)),
+    () => "[]",
+  );
 
-    const storedComments = localStorage.getItem(`comments-${postId}`);
+  const parsedComments = JSON.parse(comments) as Comment[];
 
-    if (!storedComments) {
-      return [];
-    }
+  function addComment(comment: Omit<Comment, "id">) {
+    const currentComments = getStoredComments(postId);
 
-    try {
-      return JSON.parse(storedComments);
-    } catch {
-      return [];
-    }
-  });
+    const maxId = currentComments.reduce(
+      (max, currentComment) => Math.max(max, currentComment.id),
+      0,
+    );
 
-  useEffect(() => {
-    localStorage.setItem(`comments-${postId}`, JSON.stringify(comments));
-  }, [comments, postId]);
+    const newComment: Comment = {
+      ...comment,
+      id: maxId + 1,
+    };
 
-  function addComment(comment: Comment) {
-    setComments((currentComments) => [comment, ...currentComments]);
+    const updatedComments = [newComment, ...currentComments];
+
+    localStorage.setItem(
+      getStorageKey(postId),
+      JSON.stringify(updatedComments),
+    );
+
+    window.dispatchEvent(new Event("comments-updated"));
   }
 
   return {
-    comments,
+    comments: parsedComments,
     addComment,
-    isLoaded: true,
   };
 }

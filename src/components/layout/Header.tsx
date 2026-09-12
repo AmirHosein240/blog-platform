@@ -1,16 +1,21 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 import ThemeToggle from "./ThemeToggle";
 
 export default function Header() {
+  const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   function closeMenu() {
     setIsMenuOpen(false);
   }
+
+  const isHomeActive = pathname === "/";
+  const isPostsActive = pathname.startsWith("/posts");
 
   return (
     <header className="border-b bg-white dark:border-gray-800 dark:bg-gray-950">
@@ -20,23 +25,31 @@ export default function Header() {
           <Link
             href="/"
             onClick={closeMenu}
-            className="text-xl font-bold dark:text-white"
+            className="text-xl font-bold tracking-tight text-gray-900 transition hover:opacity-80 dark:text-white"
           >
             MyBlog
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden items-center gap-6 md:flex">
+          <nav className="hidden items-center gap-2 md:flex">
             <Link
               href="/"
-              className="text-gray-700 transition hover:text-black dark:text-gray-200 dark:hover:text-white"
+              className={`rounded-md px-3 py-2 text-sm font-medium transition ${
+                isHomeActive
+                  ? "bg-gray-100 text-black dark:bg-gray-800 dark:text-white"
+                  : "text-gray-600 hover:bg-gray-100 hover:text-black dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+              }`}
             >
               Home
             </Link>
 
             <Link
               href="/posts"
-              className="text-gray-700 transition hover:text-black dark:text-gray-200 dark:hover:text-white"
+              className={`rounded-md px-3 py-2 text-sm font-medium transition ${
+                isPostsActive
+                  ? "bg-gray-100 text-black dark:bg-gray-800 dark:text-white"
+                  : "text-gray-600 hover:bg-gray-100 hover:text-black dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+              }`}
             >
               Posts
             </Link>
@@ -51,9 +64,12 @@ export default function Header() {
             <button
               type="button"
               onClick={() => setIsMenuOpen((current) => !current)}
-              className="rounded-md border px-3 py-2 text-sm dark:border-gray-700"
-              aria-label="Toggle navigation menu"
+              className="rounded-md border border-gray-300 px-3 py-2 text-sm transition hover:bg-gray-100 dark:border-gray-700 dark:hover:bg-gray-800"
+              aria-label={
+                isMenuOpen ? "Close navigation menu" : "Open navigation menu"
+              }
               aria-expanded={isMenuOpen}
+              aria-controls="mobile-navigation"
             >
               {isMenuOpen ? "✕" : "☰"}
             </button>
@@ -62,12 +78,19 @@ export default function Header() {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <nav className="border-t py-4 md:hidden dark:border-gray-800">
-            <div className="flex flex-col gap-4">
+          <nav
+            id="mobile-navigation"
+            className="border-t py-4 dark:border-gray-800 md:hidden"
+          >
+            <div className="flex flex-col gap-2">
               <Link
                 href="/"
                 onClick={closeMenu}
-                className="text-gray-700 dark:text-gray-200"
+                className={`rounded-md px-3 py-2 text-sm font-medium transition ${
+                  isHomeActive
+                    ? "bg-gray-100 text-black dark:bg-gray-800 dark:text-white"
+                    : "text-gray-600 hover:bg-gray-100 hover:text-black dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                }`}
               >
                 Home
               </Link>
@@ -75,7 +98,11 @@ export default function Header() {
               <Link
                 href="/posts"
                 onClick={closeMenu}
-                className="text-gray-700 dark:text-gray-200"
+                className={`rounded-md px-3 py-2 text-sm font-medium transition ${
+                  isPostsActive
+                    ? "bg-gray-100 text-black dark:bg-gray-800 dark:text-white"
+                    : "text-gray-600 hover:bg-gray-100 hover:text-black dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white"
+                }`}
               >
                 Posts
               </Link>

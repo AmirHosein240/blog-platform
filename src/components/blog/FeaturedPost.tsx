@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import type { Post } from "@/types/post";
+import type { Post } from "@/services/generated/model/post";
+
 import AuthorBadge from "./AuthorBadge";
 
 interface FeaturedPostProps {
@@ -9,7 +10,7 @@ interface FeaturedPostProps {
 }
 
 export default function FeaturedPost({ post }: FeaturedPostProps) {
-  const imageUrl = `https://picsum.photos/seed/featured-${post.id}/1200/700`;
+  const imageUrl = `https://picsum.photos/seed/featured-post-${post.id}/1600/900`;
 
   return (
     <article className="mt-8 overflow-hidden rounded-2xl border bg-gray-50 dark:border-gray-800 dark:bg-gray-900">
@@ -20,6 +21,7 @@ export default function FeaturedPost({ post }: FeaturedPostProps) {
             alt={post.title}
             fill
             priority
+            sizes="(max-width: 768px) 100vw, 50vw"
             className="object-cover transition duration-300 hover:scale-105"
           />
         </div>

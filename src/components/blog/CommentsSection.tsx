@@ -1,8 +1,10 @@
 "use client";
 
-import type { Comment } from "@/types/comment";
+import type { Comment } from "@/services/generated/model/comment";
+
 import CommentForm from "./CommentForm";
 import CommentList from "./CommentList";
+
 import { usePersistedComments } from "@/hooks/usePersistedComments";
 
 interface CommentsSectionProps {
@@ -14,13 +16,10 @@ export default function CommentsSection({
   postId,
   comments,
 }: CommentsSectionProps) {
-  const {
-    comments: persistedComments,
-    addComment,
-    isLoaded,
-  } = usePersistedComments(postId);
+  const { comments: persistedComments, addComment } =
+    usePersistedComments(postId);
 
-  const allComments = [...persistedComments, ...(isLoaded ? comments : [])];
+  const allComments = [...persistedComments, ...comments];
 
   return (
     <>

@@ -1,17 +1,34 @@
+"use client";
+
 import Link from "next/link";
 
-import { getAuthor } from "@/lib/api";
+import { useGetAuthor } from "@/services/generated/users/users";
 
 interface AuthorBadgeProps {
   authorId: number;
 }
 
-export default async function AuthorBadge({ authorId }: AuthorBadgeProps) {
-  const author = await getAuthor(String(authorId));
+export default function AuthorBadge({ authorId }: AuthorBadgeProps) {
+  const { data, isLoading, error } = useGetAuthor(authorId);
 
-  if (!author) {
+  if (isLoading) {
+    return (
+      <div className="flex items-center gap-3">
+        <div className="h-10 w-10 rounded-full bg-gray-200 dark:bg-gray-800" />
+
+        <div>
+          <div className="h-4 w-24 rounded bg-gray-200 dark:bg-gray-800" />
+          <div className="mt-2 h-3 w-16 rounded bg-gray-200 dark:bg-gray-800" />
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !data?.data) {
     return null;
   }
+
+  const author = data.data;
 
   const initial = author.name.charAt(0).toUpperCase();
 

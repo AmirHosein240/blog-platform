@@ -4,11 +4,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import type { Comment } from "@/types/comment";
+import type { Comment } from "@/services/generated/model/comment";
 
 interface CommentFormProps {
   postId: number;
-  addComment: (comment: Comment) => void;
+  addComment: (comment: Omit<Comment, "id">) => void;
 }
 
 const commentSchema = z.object({
@@ -30,9 +30,8 @@ export default function CommentForm({ postId, addComment }: CommentFormProps) {
   });
 
   function onSubmit(data: CommentFormData) {
-    const newComment: Comment = {
+    const newComment: Omit<Comment, "id"> = {
       postId,
-      id: crypto.randomUUID(),
       name: data.name,
       email: data.email,
       body: data.body,

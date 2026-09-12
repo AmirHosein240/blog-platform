@@ -1,0 +1,189 @@
+swagger: "2.0"
+
+info:
+  title: Blog Platform API
+  description: API specification for the Blog Platform
+  version: "1.0.0"
+
+host: jsonplaceholder.typicode.com
+basePath: /
+schemes:
+  - https
+
+paths:
+  /posts:
+    get:
+      tags:
+        - Posts
+      summary: Get all posts
+      description: Returns a list of all blog posts.
+      operationId: getPosts
+      responses:
+        "200":
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Post"
+
+  /posts/{id}:
+    get:
+      tags:
+        - Posts
+      summary: Get a single post
+      description: Returns a single blog post by ID.
+      operationId: getPost
+      parameters:
+        - name: id
+          in: path
+          description: Post ID
+          required: true
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: Successful response
+          schema:
+            $ref: "#/definitions/Post"
+        "404":
+          description: Post not found
+
+  /users/{id}:
+    get:
+      tags:
+        - Users
+      summary: Get a single author
+      description: Returns an author by ID.
+      operationId: getAuthor
+      parameters:
+        - name: id
+          in: path
+          description: Author ID
+          required: true
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: Successful response
+          schema:
+            $ref: "#/definitions/Author"
+        "404":
+          description: Author not found
+
+  /posts/{postId}/comments:
+    get:
+      tags:
+        - Comments
+      summary: Get comments for a post
+      description: Returns all comments belonging to a post.
+      operationId: getComments
+      parameters:
+        - name: postId
+          in: path
+          description: Post ID
+          required: true
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: Successful response
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Comment"
+
+definitions:
+  Post:
+    type: object
+    required:
+      - userId
+      - id
+      - title
+      - body
+    properties:
+      userId:
+        type: integer
+        format: int32
+      id:
+        type: integer
+        format: int32
+      title:
+        type: string
+      body:
+        type: string
+
+  Author:
+    type: object
+    required:
+      - id
+      - name
+      - username
+      - email
+      - address
+      - phone
+      - website
+      - company
+    properties:
+      id:
+        type: integer
+        format: int32
+      name:
+        type: string
+      username:
+        type: string
+      email:
+        type: string
+        format: email
+      address:
+        type: object
+        properties:
+          street:
+            type: string
+          suite:
+            type: string
+          city:
+            type: string
+          zipcode:
+            type: string
+          geo:
+            type: object
+            properties:
+              lat:
+                type: string
+              lng:
+                type: string
+      phone:
+        type: string
+      website:
+        type: string
+      company:
+        type: object
+        properties:
+          name:
+            type: string
+          catchPhrase:
+            type: string
+          bs:
+            type: string
+
+  Comment:
+    type: object
+    required:
+      - postId
+      - id
+      - name
+      - email
+      - body
+    properties:
+      postId:
+        type: integer
+        format: int32
+      id:
+        type: integer
+        format: int32
+      name:
+        type: string
+      email:
+        type: string
+      body:
+        type: string

@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
+
 import Link from "next/link";
+
 import { notFound } from "next/navigation";
 
-import { getAuthor, getPosts } from "@/lib/api";
+import { getPosts } from "@/services/generated/posts/posts";
+import { getAuthor } from "@/services/generated/users/users";
+
 import PostCard from "@/components/blog/PostCard";
 
 interface AuthorPageProps {
@@ -14,7 +18,10 @@ export async function generateMetadata({
 }: AuthorPageProps): Promise<Metadata> {
   const { id } = await params;
 
-  const author = await getAuthor(id);
+  const authorId = Number(id);
+
+  const result = await getAuthor(authorId);
+  const author = result.data;
 
   if (!author) {
     return {
@@ -32,13 +39,17 @@ export async function generateMetadata({
 export default async function AuthorPage({ params }: AuthorPageProps) {
   const { id } = await params;
 
-  const author = await getAuthor(id);
+  const authorId = Number(id);
+
+  const authorResult = await getAuthor(authorId);
+  const author = authorResult.data;
 
   if (!author) {
     notFound();
   }
 
-  const posts = await getPosts();
+  const postsResult = await getPosts();
+  const posts = postsResult.data;
 
   const authorPosts = posts.filter((post) => post.userId === author.id);
 

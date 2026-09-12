@@ -1,34 +1,16 @@
 "use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
+  onPageChange: (page: number) => void;
 }
 
 export default function Pagination({
   currentPage,
   totalPages,
+  onPageChange,
 }: PaginationProps) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
-  function goToPage(page: number) {
-    const params = new URLSearchParams(searchParams.toString());
-
-    if (page === 1) {
-      params.delete("page");
-    } else {
-      params.set("page", String(page));
-    }
-
-    const queryString = params.toString();
-
-    router.push(queryString ? `${pathname}?${queryString}` : pathname);
-  }
-
   if (totalPages <= 1) {
     return null;
   }
@@ -44,21 +26,20 @@ export default function Pagination({
 
   return (
     <div className="mt-8 flex items-center justify-center gap-2 px-2">
-      {/* Previous */}
       <button
-        onClick={() => goToPage(currentPage - 1)}
+        onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
         className="rounded-md border px-3 py-2 text-sm hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:hover:bg-gray-800 sm:px-4"
       >
         Previous
       </button>
 
-      {/* Mobile: only 3 pages */}
+      {/* Mobile */}
       <div className="flex items-center gap-2 md:hidden">
         {mobilePages.map((page) => (
           <button
             key={page}
-            onClick={() => goToPage(page)}
+            onClick={() => onPageChange(page)}
             className={`min-w-10 rounded-md border px-3 py-2 ${
               currentPage === page
                 ? "bg-black text-white dark:bg-white dark:text-black"
@@ -70,7 +51,7 @@ export default function Pagination({
         ))}
       </div>
 
-      {/* Desktop: all pages */}
+      {/* Desktop */}
       <div className="hidden items-center gap-2 md:flex">
         {Array.from({ length: totalPages }, (_, index) => {
           const page = index + 1;
@@ -78,7 +59,7 @@ export default function Pagination({
           return (
             <button
               key={page}
-              onClick={() => goToPage(page)}
+              onClick={() => onPageChange(page)}
               className={`min-w-10 rounded-md border px-3 py-2 ${
                 currentPage === page
                   ? "bg-black text-white dark:bg-white dark:text-black"
@@ -91,9 +72,8 @@ export default function Pagination({
         })}
       </div>
 
-      {/* Next */}
       <button
-        onClick={() => goToPage(currentPage + 1)}
+        onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
         className="rounded-md border px-3 py-2 text-sm hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-700 dark:hover:bg-gray-800 sm:px-4"
       >

@@ -1,4 +1,4 @@
-import type { Comment } from "@/types/comment";
+import type { Comment } from "@/services/generated/model/comment";
 
 interface CommentListProps {
   comments: Comment[];

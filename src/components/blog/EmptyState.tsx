@@ -5,10 +5,16 @@ interface EmptyStateProps {
 
 export default function EmptyState({ title, description }: EmptyStateProps) {
   return (
-    <div className="mt-12 rounded-lg border border-dashed bg-white p-12 text-center dark:border-gray-700 dark:bg-gray-900">
-      <h2 className="text-2xl font-semibold">{title}</h2>
+    <div className="mt-12 rounded-2xl border border-dashed bg-gray-50 p-12 text-center dark:border-gray-800 dark:bg-gray-900">
+      <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-gray-200 text-xl font-bold dark:bg-gray-800">
+        ?
+      </div>
 
-      <p className="mt-3 text-gray-600 dark:text-gray-400">{description}</p>
+      <h2 className="mt-5 text-2xl font-semibold">{title}</h2>
+
+      <p className="mx-auto mt-3 max-w-md text-gray-600 dark:text-gray-400">
+        {description}
+      </p>
     </div>
   );
 }

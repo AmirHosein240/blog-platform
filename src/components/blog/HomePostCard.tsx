@@ -1,14 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-
-import type { Post } from "@/types/post";
+import type { Post } from "@/services/generated/model/post";
 
 interface HomePostCardProps {
   post: Post;
 }
 
 export default function HomePostCard({ post }: HomePostCardProps) {
-  const imageUrl = `https://picsum.photos/seed/post-${post.id}/800/500`;
+  const imageUrl = `https://picsum.photos/seed/post-${post.id}/1200/800`;
 
   return (
     <article className="group overflow-hidden rounded-xl border bg-white transition duration-200 hover:-translate-y-1 hover:shadow-lg dark:border-gray-800 dark:bg-gray-950">
@@ -18,6 +17,7 @@ export default function HomePostCard({ post }: HomePostCardProps) {
             src={imageUrl}
             alt={post.title}
             fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="object-cover transition duration-300 group-hover:scale-105"
           />
         </div>
